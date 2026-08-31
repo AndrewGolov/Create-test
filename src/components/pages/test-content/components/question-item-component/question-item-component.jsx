@@ -1,5 +1,4 @@
 /* eslint-disable react-refresh/only-export-components */
-
 import styled from 'styled-components';
 
 const QuestionItemComponentContainer = ({ className, questionData, onChooseAnswer, userAnswers }) => {

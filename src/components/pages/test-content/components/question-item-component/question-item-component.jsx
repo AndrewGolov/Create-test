@@ -2,14 +2,22 @@
 
 import styled from 'styled-components';
 
-const QuestionItemComponentContainer = ({ className, questionData }) => {
+const QuestionItemComponentContainer = ({ className, questionData, onChooseAnswer, userAnswers }) => {
+	const selectedAnswer = userAnswers.find(({ questionId }) => questionId === questionData.id);
+
 	return (
 		<>
 			<span>{questionData.question}</span>
 			<ul className={className}>
-				{questionData.answers.map(({ title, id }, index) => (
-					<li className="ql__item" key={index}>
-						<input type="radio" name={questionData.id} id={id} />
+				{questionData.answers.map(({ title, id }) => (
+					<li className="ql__item" key={id}>
+						<input
+							type="radio"
+							name={`question-${questionData.id}`}
+							id={id}
+							onChange={onChooseAnswer}
+							checked={selectedAnswer?.answerId === id}
+						/>
 						<label htmlFor={id}>{title}</label>
 					</li>
 				))}

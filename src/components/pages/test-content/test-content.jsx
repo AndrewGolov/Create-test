@@ -8,50 +8,50 @@ const fetchTestData = [
 	{
 		question: 'Допустим какой-то вопрос 1',
 		answers: [
-			{ title: 'ответ 1 на вопрос', correct: false, id: '1788091568028' },
-			{ title: 'ответ 2 на вопрос', correct: false, id: '1788091568228' },
-			{ title: 'ответ 3 на вопрос', correct: true, id: '1788091568428' },
-			{ title: 'ответ 4 на вопрос', correct: false, id: '1788091568628' },
+			{ title: 'ответ 1 на вопрос', isCorrect: false, id: '1788091568028' },
+			{ title: 'ответ 2 на вопрос', isCorrect: false, id: '1788091568228' },
+			{ title: 'ответ 3 на вопрос', isCorrect: true, id: '1788091568428' },
+			{ title: 'ответ 4 на вопрос', isCorrect: false, id: '1788091568628' },
 		],
 		id: 1,
 	},
 	{
 		question: 'Допустим какой-то вопрос 2',
 		answers: [
-			{ title: 'ответ 1 на вопрос', correct: false, id: '1788091568912' },
-			{ title: 'ответ 2 на вопрос', correct: false, id: '1788091568914' },
-			{ title: 'ответ 3 на вопрос', correct: false, id: '1788091568916' },
-			{ title: 'ответ 4 на вопрос', correct: true, id: '1788091568918' },
+			{ title: 'ответ 1 на вопрос', isCorrect: false, id: '1788091568912' },
+			{ title: 'ответ 2 на вопрос', isCorrect: false, id: '1788091568914' },
+			{ title: 'ответ 3 на вопрос', isCorrect: false, id: '1788091568916' },
+			{ title: 'ответ 4 на вопрос', isCorrect: true, id: '1788091568918' },
 		],
 		id: 2,
 	},
 	{
 		question: 'Допустим какой-то вопрос 3',
 		answers: [
-			{ title: 'ответ 1 на вопрос', correct: false, id: '1788091568922' },
-			{ title: 'ответ 2 на вопрос', correct: true, id: '1788091568924' },
-			{ title: 'ответ 3 на вопрос', correct: false, id: '1788091568926' },
-			{ title: 'ответ 4 на вопрос', correct: false, id: '1788091568928' },
+			{ title: 'ответ 1 на вопрос', isCorrect: false, id: '1788091568922' },
+			{ title: 'ответ 2 на вопрос', isCorrect: true, id: '1788091568924' },
+			{ title: 'ответ 3 на вопрос', isCorrect: false, id: '1788091568926' },
+			{ title: 'ответ 4 на вопрос', isCorrect: false, id: '1788091568928' },
 		],
 		id: 3,
 	},
 	{
 		question: 'Допустим какой-то вопрос 4',
 		answers: [
-			{ title: 'ответ 1 на вопрос', correct: true, id: '1788091568944' },
-			{ title: 'ответ 2 на вопрос', correct: false, id: '1788091568940' },
-			{ title: 'ответ 3 на вопрос', correct: false, id: '1788091568935' },
-			{ title: 'ответ 4 на вопрос', correct: false, id: '1788091568930' },
+			{ title: 'ответ 1 на вопрос', isCorrect: true, id: '1788091568944' },
+			{ title: 'ответ 2 на вопрос', isCorrect: false, id: '1788091568940' },
+			{ title: 'ответ 3 на вопрос', isCorrect: false, id: '1788091568935' },
+			{ title: 'ответ 4 на вопрос', isCorrect: false, id: '1788091568930' },
 		],
 		id: 4,
 	},
 	{
 		question: 'Допустим какой-то вопрос 5',
 		answers: [
-			{ title: 'ответ 1 на вопрос', correct: false, id: '1788091568946' },
-			{ title: 'ответ 2 на вопрос', correct: false, id: '1788091568950' },
-			{ title: 'ответ 3 на вопрос', correct: true, id: '1788091568952' },
-			{ title: 'ответ 4 на вопрос', correct: false, id: '1788091568955' },
+			{ title: 'ответ 1 на вопрос', isCorrect: false, id: '1788091568946' },
+			{ title: 'ответ 2 на вопрос', isCorrect: false, id: '1788091568950' },
+			{ title: 'ответ 3 на вопрос', isCorrect: true, id: '1788091568952' },
+			{ title: 'ответ 4 на вопрос', isCorrect: false, id: '1788091568955' },
 		],
 		id: 5,
 	},
@@ -60,17 +60,53 @@ const fetchTestData = [
 const TestContentContainer = ({ className }) => {
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [dataTest, setDataTest] = useState(fetchTestData);
+	const [userAnswers, setUserAnswers] = useState([]);
+	const [statisticUserAnswers, setStatisticUserAnswers] = useState([]);
+	const [isChoosenAnswer, setIsChoosenAnswer] = useState(false);
+
+	if (userAnswers.length === dataTest.length) {
+		console.log('Конец теста, можно нажать завершить');
+	}
+
+	// localStorage.setItem('answerTest', JSON.stringify(userAnswers));
+
+	const onChooseAnswer = ({ target }) => {
+		const chooseAnswer = dataTest[currentQuestion].answers.find((ans) => ans.id === target.id);
+		const userAnswer = {
+			questionId: dataTest[currentQuestion].id,
+			answerId: target.id,
+			isCorrect: chooseAnswer.isCorrect,
+		};
+
+		setUserAnswers((prev) =>
+			prev.some((ans) => ans.questionId === userAnswer.questionId)
+				? prev.map((ans) =>
+						ans.questionId === userAnswer.questionId
+							? { ...ans, answerId: userAnswer.answerId, isCorrect: userAnswer.isCorrect }
+							: ans,
+					)
+				: [...prev, userAnswer],
+		);
+		setIsChoosenAnswer(true);
+	};
 	return (
 		<div className={className}>
 			<form>
-				<QuestionItemComponent questionData={dataTest[currentQuestion]} />
+				<QuestionItemComponent
+					questionData={dataTest[currentQuestion]}
+					onChooseAnswer={onChooseAnswer}
+					userAnswers={userAnswers}
+				/>
 			</form>
 			<div className="action-panel">
 				<Button
 					type="button"
 					className="ap-previous-btn"
 					margin="0 10px 0 0"
-					onClick={() => setCurrentQuestion((prev) => prev - 1)}
+					onClick={() => {
+						setCurrentQuestion((prev) => prev - 1);
+						setIsChoosenAnswer(false);
+					}}
 					disabled={currentQuestion === 0}
 				>
 					Предыдущий вопрос
@@ -78,8 +114,11 @@ const TestContentContainer = ({ className }) => {
 				<Button
 					type="button"
 					className="ap-next-btn"
-					onClick={() => setCurrentQuestion((prev) => prev + 1)}
-					disabled={currentQuestion === dataTest.length - 1}
+					onClick={() => {
+						setCurrentQuestion((prev) => prev + 1);
+						setIsChoosenAnswer(false);
+					}}
+					disabled={currentQuestion === dataTest.length - 1 || !isChoosenAnswer}
 				>
 					Следующий вопрос
 				</Button>

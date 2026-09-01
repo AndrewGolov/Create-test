@@ -13,18 +13,18 @@ const StyledLinkContainer = ({ className, children, ...props }) => {
 export const StyledLink = styled(StyledLinkContainer)`
 	display: block;
 	width: ${({ width = '300px' }) => width};
-	padding: 20px 40px;
+	padding: 15px 30px;
 	margin: ${({ margin }) => margin};
 	cursor: pointer;
-	background: #7a8983;
+	background: #1a9966;
 	font-size: 20px;
 	border-radius: 5px;
 	border: none;
 	text-decoration: none;
+	color: #fff;
 
 	&:hover {
 		transition: all 0.3s ease;
-		background: #2a4037;
-		border-radius: 15px;
+		background: #6ed474;
 	}
 `;

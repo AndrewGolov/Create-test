@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { TestComponent, FinishedTestComponent } from './components';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const fetchTestData = [
@@ -9,11 +9,16 @@ const fetchTestData = [
 		answers: [
 			{ title: 'Да', isCorrect: true, id: '1788091568028' },
 			{ title: 'Нет', isCorrect: false, id: '1788091568228' },
-			{ title: 'Меня зовут Максим', isCorrect: false, id: '1788091568428' },
+			{
+				title: 'styled-components is the result of wondering how we could enhance CSS for styling React component systems. By focusing on a single use case we managed to optimize the experience for developers as well as the output for end users.',
+				isCorrect: false,
+				id: '1788091568428',
+			},
 			{ title: 'Меня не зовут', isCorrect: false, id: '1788091568628' },
 		],
 		id: 1,
 	},
+
 	{
 		question: 'Тебе сколько лет?',
 		answers: [
@@ -24,57 +29,24 @@ const fetchTestData = [
 		],
 		id: 2,
 	},
-	{
-		question: 'Ты гражданин РФ?',
-		answers: [
-			{ title: 'Нет', isCorrect: false, id: '1788091568922' },
-			{ title: 'Да', isCorrect: true, id: '1788091568924' },
-			{ title: 'Может быть', isCorrect: false, id: '1788091568926' },
-			{ title: 'Я бомж', isCorrect: false, id: '1788091568928' },
-		],
-		id: 3,
-	},
-	{
-		question: 'Ты женат?',
-		answers: [
-			{ title: 'Нет', isCorrect: true, id: '1788091568944' },
-			{ title: 'Да', isCorrect: false, id: '1788091568940' },
-			{ title: 'В разводе!', isCorrect: false, id: '1788091568935' },
-			{ title: 'Не определился', isCorrect: false, id: '1788091568930' },
-		],
-		id: 4,
-	},
-	{
-		question: 'Ты любишь BMW',
-		answers: [
-			{ title: 'Нет', isCorrect: false, id: '1788091568946' },
-			{ title: 'Еще раз нет', isCorrect: false, id: '1788091568950' },
-			{ title: 'BMW FOREVER', isCorrect: true, id: '1788091568952' },
-			{ title: 'VAG One Love', isCorrect: false, id: '1788091568955' },
-		],
-		id: 5,
-	},
 ];
 
 const TestContentContainer = ({ className }) => {
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [dataTest, setDataTest] = useState(fetchTestData); // временный стейт до получения данных с сервера
 	const [userAnswers, setUserAnswers] = useState([]);
-	const [statisticTest, setStatisticTest] = useState([]);
-	const [isChoosenAnswer, setIsChoosenAnswer] = useState(false); //todo Заменить на вычисляемое значение из массива userAnswers
+	const [statisticTest, setStatisticTest] = useState({});
 	const [isFinished, setIsFinished] = useState(false);
-	const history = JSON.parse(localStorage.getItem('Statistic-User-Test'));
 
-	console.log(history);
+	const previousBtnOnClick = () => setCurrentQuestion((prev) => prev - 1);
+	const nextBtnOnClick = () => setCurrentQuestion((prev) => prev + 1);
+	const onRepeatTest = () => {
+		setCurrentQuestion(0);
+		setUserAnswers([]);
+		setStatisticTest({});
+		setIsFinished(false);
+	};
 
-	const previousBtnOnClick = () => {
-		setCurrentQuestion((prev) => prev - 1);
-		setIsChoosenAnswer(true);
-	};
-	const nextBtnOnClick = () => {
-		setCurrentQuestion((prev) => prev + 1);
-		setIsChoosenAnswer(false);
-	};
 	const onChooseAnswer = ({ target }) => {
 		const chooseAnswer = dataTest[currentQuestion].answers.find((ans) => ans.id === target.id);
 		const userAnswer = {
@@ -92,40 +64,40 @@ const TestContentContainer = ({ className }) => {
 					)
 				: [...prev, userAnswer],
 		);
-		setIsChoosenAnswer(true);
 	};
+
 	const onFinishTest = () => {
-		const isCorrectAnswers = userAnswers.filter(({ isCorrect }) => isCorrect === true);
-		const counterCorrectAnswers = isCorrectAnswers.length;
-		console.log(counterCorrectAnswers);
+		const CorrectAnswers = userAnswers.filter(({ isCorrect }) => isCorrect === true);
+
 		const newStatistic = {
 			date: Date.now(),
 			countQuestions: dataTest.length,
-			countCorrectAnswers: counterCorrectAnswers,
+			countCorrectAnswers: CorrectAnswers.length,
+			answers: [...userAnswers],
 		};
-		console.log('newStatistic:', newStatistic);
-		setStatisticTest((prev) => [...prev, newStatistic]);
+
+		setStatisticTest(newStatistic);
 		setIsFinished(true);
 	};
 
 	useEffect(() => {
-		if (isFinished) {
-			localStorage.setItem('Statistic-User-Test', JSON.stringify(statisticTest));
-		}
-	}, [isFinished, statisticTest]);
+		if (Object.keys(statisticTest).length === 0) return;
+		const getStatistic = JSON.parse(localStorage.getItem('statisticTesting')) || [];
+		localStorage.setItem('statisticTesting', JSON.stringify([...getStatistic, statisticTest]));
+	}, [statisticTest]);
+
 	return (
 		<div className={className}>
 			{isFinished ? (
-				<FinishedTestComponent statistic={statisticTest} />
+				<FinishedTestComponent statistic={statisticTest} onRepeatTest={onRepeatTest} />
 			) : (
 				<TestComponent
+					userAnswers={userAnswers}
 					dataTest={dataTest}
 					currentQuestion={currentQuestion}
 					previousBtnOnClick={previousBtnOnClick}
 					nextBtnOnClick={nextBtnOnClick}
 					onChooseAnswer={onChooseAnswer}
-					isChoosenAnswer={isChoosenAnswer}
-					userAnswers={userAnswers}
 					onFinishTest={onFinishTest}
 				/>
 			)}

@@ -13,6 +13,7 @@ const ControlPanelContainer = ({ className }) => {
 
 export const ControlPanel = styled(ControlPanelContainer)`
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: center;
+	gap: 10px;
 	padding: 10px;
 `;

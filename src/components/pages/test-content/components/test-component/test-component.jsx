@@ -11,12 +11,13 @@ const TestComponentContainer = ({
 	previousBtnOnClick,
 	nextBtnOnClick,
 	onChooseAnswer,
-	isChoosenAnswer,
 	onFinishTest,
 }) => {
+	const isAnswerSelected = !!userAnswers.find((ans) => ans?.questionId === dataTest[currentQuestion].id);
+
 	return (
 		<div className={className}>
-			<form>
+			<form className="test-form">
 				<div>
 					{currentQuestion + 1}/{dataTest.length}
 				</div>
@@ -36,7 +37,7 @@ const TestComponentContainer = ({
 				>
 					Предыдущий вопрос
 				</Button>
-				{userAnswers.length === dataTest.length ? (
+				{userAnswers?.length === dataTest?.length ? (
 					<Button type="button" className="ap-next-btn" onClick={onFinishTest}>
 						Завершить тест
 					</Button>
@@ -45,7 +46,7 @@ const TestComponentContainer = ({
 						type="button"
 						className="ap-next-btn"
 						onClick={nextBtnOnClick}
-						disabled={currentQuestion === dataTest.length - 1 || !isChoosenAnswer}
+						disabled={currentQuestion === dataTest.length - 1 || !isAnswerSelected}
 					>
 						Следующий вопрос
 					</Button>
@@ -57,4 +58,12 @@ const TestComponentContainer = ({
 
 export const TestComponent = styled(TestComponentContainer)`
 	padding: 10px;
+	font-size: 20px;
+	.test-form {
+		max-width: 600px;
+		margin: 0 auto;
+	}
+	.action-panel {
+		margin: 40px 0 0 0;
+	}
 `;

@@ -9,11 +9,10 @@ export const CircleElement = styled(CircleElementContainer)`
 	text-align: center;
 	background-color: ${({ $ansId }) => {
 		switch ($ansId) {
-			case -1:
+			case false:
 				return 'red';
-			case 0:
-				return 'transparent';
-			case 1:
+
+			case true:
 				return 'green';
 		}
 	}};

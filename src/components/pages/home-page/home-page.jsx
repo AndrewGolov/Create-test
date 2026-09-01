@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import { ControlPanel, StatisticsList } from './components';
-
 import styled from 'styled-components';
 
 const HomePageContainer = ({ className }) => {

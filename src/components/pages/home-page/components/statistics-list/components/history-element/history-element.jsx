@@ -1,25 +1,20 @@
 /* eslint-disable react-refresh/only-export-components */
-import { useState } from 'react';
 import { CircleElement } from '../circle-element/circle-element';
-
 import styled from 'styled-components';
 
-const HistoryElementContainer = ({ className, date = '12.07.2026' }) => {
-	const [answers, setAnswers] = useState([
-		1, -1, 1, 0, -1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1,
-	]); /*todo получение данных с ID ответа*/
-	const correctAns = answers.filter((ansId) => ansId === 1);
+const HistoryElementContainer = ({ className, statistic }) => {
+	const correctAns = statistic.answers.filter((ans) => ans.isCorrect === true);
 
 	return (
 		<li className={className}>
-			<div>{date}</div>
+			<div>{new Date(statistic.date).toLocaleString()}</div>
 			<div className="progressBar">
-				{answers.map(($ansId, i) => (
-					<CircleElement key={i} $ansId={$ansId} />
+				{statistic.answers.map((item) => (
+					<CircleElement key={item.answerId} $ansId={item.isCorrect} />
 				))}
 			</div>
 			<div>
-				Верно: {correctAns.length} из {answers.length}
+				Верно: {correctAns.length} из {statistic.answers.length}
 			</div>
 		</li>
 	);

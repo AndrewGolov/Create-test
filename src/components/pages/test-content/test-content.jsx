@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { TestComponent, FinishedTestComponent } from './components';
+import { getTestData } from '../../../bff';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -33,11 +34,10 @@ const fetchTestData = [
 
 const TestContentContainer = ({ className }) => {
 	const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [dataTest, setDataTest] = useState(fetchTestData); // временный стейт до получения данных с сервера
 	const [userAnswers, setUserAnswers] = useState([]);
 	const [statisticTest, setStatisticTest] = useState({});
 	const [isFinished, setIsFinished] = useState(false);
-
+	const [dataTest, setDataTest] = useState([]);
 	const previousBtnOnClick = () => setCurrentQuestion((prev) => prev - 1);
 	const nextBtnOnClick = () => setCurrentQuestion((prev) => prev + 1);
 	const onRepeatTest = () => {
@@ -80,6 +80,11 @@ const TestContentContainer = ({ className }) => {
 		setIsFinished(true);
 	};
 
+	useEffect(() => {
+		getTestData().then((data) => {
+			setDataTest(data);
+		});
+	}, []);
 	useEffect(() => {
 		if (Object.keys(statisticTest).length === 0) return;
 		const getStatistic = JSON.parse(localStorage.getItem('statisticTesting')) || [];

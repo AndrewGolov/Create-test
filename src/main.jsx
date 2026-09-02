@@ -16,6 +16,10 @@ const router = createBrowserRouter([
 		element: <TestContent />,
 		children: [],
 	},
+	{
+		path: '*',
+		element: <h1>Page Not Found</h1>,
+	},
 ]);
 
 const root = document.getElementById('root');

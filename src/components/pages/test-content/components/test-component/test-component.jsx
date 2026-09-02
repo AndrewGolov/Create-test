@@ -13,7 +13,8 @@ const TestComponentContainer = ({
 	onChooseAnswer,
 	onFinishTest,
 }) => {
-	const isAnswerSelected = !!userAnswers.find((ans) => ans?.questionId === dataTest[currentQuestion].id);
+	if (!dataTest || !dataTest[currentQuestion]) return null;
+	const isAnswerSelected = !!userAnswers.find((ans) => ans?.questionId === dataTest[currentQuestion]?.id);
 
 	return (
 		<div className={className}>

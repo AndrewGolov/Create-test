@@ -1,0 +1,27 @@
+{
+  "name": "user_tests",
+  "version": "1.0.0",
+  "description": "data user tests question",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "serve": "nodemon index.js"
+  },
+  "keywords": [
+    "test",
+    "answers"
+  ],
+  "author": "Andrew Golov <telegram@andre_g_life>",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^26.4.1",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.9.4",
+    "yargs": "^18.1.0"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.35",
+    "nodemon": "^3.1.14"
+  }
+}

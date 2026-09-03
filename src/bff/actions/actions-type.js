@@ -1,0 +1,1 @@
+export const ACTIONS_TYPE = { GET_TEST_DATA: 'GET_TEST_DATA' };

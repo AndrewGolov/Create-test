@@ -1,11 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Button } from '../../../../button/Button';
 import { QuestionItemComponent } from '../question-item-component/question-item-component';
+import { useSelector } from 'react-redux';
+import { selectTestsData } from '../../../../../selectors';
 import styled from 'styled-components';
 
 const TestComponentContainer = ({
 	className,
-	dataTest,
 	currentQuestion,
 	userAnswers,
 	previousBtnOnClick,
@@ -13,8 +14,9 @@ const TestComponentContainer = ({
 	onChooseAnswer,
 	onFinishTest,
 }) => {
-	if (!dataTest || !dataTest[currentQuestion]) return null;
-	const isAnswerSelected = !!userAnswers.find((ans) => ans?.questionId === dataTest[currentQuestion]?.id);
+	const dataTest = useSelector(selectTestsData);
+	if (!dataTest[currentQuestion]) return null;
+	const isAnswerSelected = !!userAnswers.find((ans) => ans?.questionId === dataTest[currentQuestion]?._id);
 
 	return (
 		<div className={className}>
@@ -23,7 +25,7 @@ const TestComponentContainer = ({
 					{currentQuestion + 1}/{dataTest.length}
 				</div>
 				<QuestionItemComponent
-					questionData={dataTest[currentQuestion]}
+					currentTestData={dataTest[currentQuestion]}
 					onChooseAnswer={onChooseAnswer}
 					userAnswers={userAnswers}
 				/>

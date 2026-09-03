@@ -1,18 +1,20 @@
 /* eslint-disable react-refresh/only-export-components */
 import styled from 'styled-components';
 
-const QuestionItemComponentContainer = ({ className, questionData, onChooseAnswer, userAnswers }) => {
-	const selectedAnswer = userAnswers.find(({ questionId }) => questionId === questionData.id);
+const QuestionItemComponentContainer = ({ className, onChooseAnswer, userAnswers, currentTestData }) => {
+	const selectedAnswer = userAnswers.find(({ questionId }) => questionId === currentTestData._id);
+	console.log('selectedAnswer', selectedAnswer);
+	console.log('userAnswer', userAnswers);
 
 	return (
 		<div className={className}>
-			<span>{questionData.question}</span>
+			<span>{currentTestData.question}</span>
 			<ul className="ql__list">
-				{questionData.answers.map(({ title, id }) => (
+				{currentTestData.answers.map(({ title, id }) => (
 					<li className="ql__item" key={id}>
 						<input
 							type="radio"
-							name={`question-${questionData.id}`}
+							name={`question-${currentTestData._id}`}
 							id={id}
 							onChange={onChooseAnswer}
 							checked={selectedAnswer?.answerId === id}

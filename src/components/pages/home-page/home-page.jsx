@@ -16,5 +16,5 @@ export const HomePage = styled(HomePageContainer)`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
-	height: 100vh;
+	height: 100%;
 `;

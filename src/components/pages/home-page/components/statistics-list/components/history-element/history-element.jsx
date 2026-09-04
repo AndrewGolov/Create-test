@@ -28,6 +28,7 @@ export const HistoryElement = styled(HistoryElementContainer)`
 	font-size: 20px;
 	border: 1px solid rgba(107, 107, 107, 1);
 	border-radius: 5px;
+	margin: 0 0 5px 0;
 
 	.progressBar {
 		max-width: 612px;

@@ -6,7 +6,7 @@ const ControlPanelContainer = ({ className }) => {
 	return (
 		<div className={className}>
 			<StyledLink to={'/testing'}>Запустить тест</StyledLink>
-			<StyledLink to={'/edit'}>Редактировать тест</StyledLink>
+			<StyledLink to={'/edit-test'}>Редактировать тест</StyledLink>
 		</div>
 	);
 };

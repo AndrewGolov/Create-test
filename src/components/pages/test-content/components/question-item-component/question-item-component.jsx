@@ -3,8 +3,6 @@ import styled from 'styled-components';
 
 const QuestionItemComponentContainer = ({ className, onChooseAnswer, userAnswers, currentTestData }) => {
 	const selectedAnswer = userAnswers.find(({ questionId }) => questionId === currentTestData._id);
-	console.log('selectedAnswer', selectedAnswer);
-	console.log('userAnswer', userAnswers);
 
 	return (
 		<div className={className}>

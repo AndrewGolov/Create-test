@@ -1,13 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import { TestComponent, FinishedTestComponent } from './components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectTestsData } from '../../../selectors';
 import { useState, useEffect } from 'react';
-import { loadTestAsync } from '../../../bff/actions';
 import styled from 'styled-components';
 
 const TestContentContainer = ({ className }) => {
-	const dispatch = useDispatch();
 	const dataTest = useSelector(selectTestsData);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [userAnswers, setUserAnswers] = useState([]);
@@ -22,10 +20,6 @@ const TestContentContainer = ({ className }) => {
 		setStatisticTest({});
 		setIsFinished(false);
 	};
-
-	useEffect(() => {
-		dispatch(loadTestAsync());
-	}, [dispatch]);
 
 	const onChooseAnswer = ({ target }) => {
 		const chooseAnswer = dataTest[currentQuestion].answers.find((ans) => ans.id === target.id);
@@ -55,7 +49,6 @@ const TestContentContainer = ({ className }) => {
 			countCorrectAnswers: correctAnswers.length,
 			answers: [...userAnswers],
 		};
-
 		setStatisticTest(newStatistic);
 		setIsFinished(true);
 	};

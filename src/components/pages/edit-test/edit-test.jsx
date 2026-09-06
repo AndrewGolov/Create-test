@@ -1,20 +1,28 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useSelector } from 'react-redux';
-import { selectTestsData } from '../../../selectors';
+import { selectTestsData, selectIsloadingTestData } from '../../../selectors';
 import { EditQuestionListItem } from './components';
+import { Loader } from '../../loader/Loader';
 import styled from 'styled-components';
 
 const EditTestContainer = ({ className }) => {
 	const dataTest = useSelector(selectTestsData);
+	const isLoadingDataTest = useSelector(selectIsloadingTestData);
 
 	return (
 		<div className={className}>
-			<h1>Редактирование теста</h1>
-			<ul>
-				{dataTest.map((test) => (
-					<EditQuestionListItem key={test._id} questionData={test} />
-				))}
-			</ul>
+			{isLoadingDataTest ? (
+				<Loader />
+			) : (
+				<>
+					<h1>Редактирование теста</h1>
+					<ul>
+						{dataTest.map((oneOfQuestionList) => (
+							<EditQuestionListItem key={oneOfQuestionList._id} oneOfQuestionList={oneOfQuestionList} />
+						))}
+					</ul>
+				</>
+			)}
 		</div>
 	);
 };

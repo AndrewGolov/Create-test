@@ -1,1 +1,1 @@
-export const selectTestsData = (state) => state.tests.testData;
+export const selectTestsData = ({ tests }) => tests.testData;

@@ -4,23 +4,25 @@ import { IconButton } from '../icon-button/icon-button';
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const EditingComponentContainer = ({ inputValue, className, onCloseEditing }) => {
+const EditingComponentContainer = ({ inputValue, className, onCloseEditing, onSubmit }) => {
 	const [value, setValue] = useState(inputValue);
+
+	const onChange = ({ target }) => setValue(target.value);
+	console.log(value);
+
 	return (
 		<div className={className}>
-			<input className="question-input" type="text" defaultValue={value} autoFocus />
-			<div>
-				<IconButton
-					type="button"
-					className="icon-button"
-					onClick={() => console.log('Сохранить изменения вопроса')}
-				>
-					<SlCheck />
-				</IconButton>
-				<IconButton type="button" className="icon-button" onClick={onCloseEditing}>
-					<SlClose />
-				</IconButton>
-			</div>
+			<form onSubmit={() => onSubmit(value)}>
+				<input className="question-input" type="text" defaultValue={value} onChange={onChange} autoFocus />
+				<div>
+					<IconButton type="submit" className="icon-button">
+						<SlCheck />
+					</IconButton>
+					<IconButton type="button" className="icon-button" onClick={onCloseEditing}>
+						<SlClose />
+					</IconButton>
+				</div>
+			</form>
 		</div>
 	);
 };
@@ -30,6 +32,12 @@ export const EditingComponent = styled(EditingComponentContainer)`
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
+
+	& form {
+		display: flex;
+		align-items: center;
+		width: 100%;
+	}
 
 	.question-input {
 		flex: 1;

@@ -1,27 +1,37 @@
 /* eslint-disable react-refresh/only-export-components */
+import { updateQuestion } from '../../../../../bff/actions';
 import { Button } from '../../../../button/Button';
+import { useDispatch } from 'react-redux';
 import { EditingComponent, IconButton } from './components';
 import { useState } from 'react';
 import { SlArrowDown, SlPencil, SlTrash } from 'react-icons/sl';
 import styled from 'styled-components';
 
-const EditQuestionListItemContainer = ({ className, questionData }) => {
+const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
+	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
 	const [isEditingQuestion, setIsEditingQuestion] = useState(false);
 	const [editingAnswerId, setEditingAnswerId] = useState(null);
 
+	const updateQuestionTest = async (questionText) => {
+		event.preventDefault();
+		const newQuestionData = { ...oneOfQuestionList, question: questionText };
+		await dispatch(updateQuestion(oneOfQuestionList._id, newQuestionData));
+		setIsEditingQuestion(false);
+	};
 	return (
 		<li className={className}>
 			<div className="question-header">
 				<div className="question-title">
 					{isEditingQuestion ? (
 						<EditingComponent
-							inputValue={questionData.question}
+							inputValue={oneOfQuestionList.question}
 							onCloseEditing={() => setIsEditingQuestion(false)}
+							onSubmit={updateQuestionTest}
 						/>
 					) : (
 						<>
-							<h4>{questionData.question}</h4>
+							<h4>{oneOfQuestionList.question}</h4>
 							<IconButton
 								type="button"
 								className="icon-button"
@@ -62,7 +72,7 @@ const EditQuestionListItemContainer = ({ className, questionData }) => {
 					</div>
 
 					<ul className="answers-list">
-						{questionData.answers.map((answer) => (
+						{oneOfQuestionList.answers.map((answer) => (
 							<li className="answer-item" key={answer.id}>
 								{editingAnswerId === answer.id ? (
 									<EditingComponent

@@ -6,16 +6,18 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const Test = require('./models/Test')
 
-
-app.use(express.urlencoded({
-	extended: true
-}))
 app.use(cors())
 app.use(express.json())
 
 app.get('/test',async(req, res) => {
 const data = await Test.find()
  res.json(data)
+})
+
+app.put('/test/edit/:id',async(req, res) => {
+	const result = await Test.findByIdAndUpdate(req.params.id, req.body, {new: true})
+	res.json(result)
+	console.log('updated result')
 })
 
 

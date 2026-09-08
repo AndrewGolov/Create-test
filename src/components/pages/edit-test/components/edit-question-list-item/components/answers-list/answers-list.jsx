@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { IconButton } from '../icon-button/icon-button';
+import { Button } from '../../../../../../button/Button';
 import { EditFormComponent } from '../edit-form-component/edit-form-component';
 import { SlPencil, SlTrash } from 'react-icons/sl';
 import styled from 'styled-components';
@@ -48,6 +49,13 @@ const AnswersListContainer = ({ className, oneOfQuestionList, editingAnswerId, s
 					</li>
 				))}
 			</ul>
+			<Button
+				type="button"
+				className="add-answer-button"
+				onClick={() => /*TODO*/ console.log('Добавить вариант ответа')}
+			>
+				Добавить вариант ответа
+			</Button>
 		</div>
 	);
 };

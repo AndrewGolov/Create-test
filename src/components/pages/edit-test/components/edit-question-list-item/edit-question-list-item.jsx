@@ -58,8 +58,12 @@ const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
 						setEditingAnswerId={setEditingAnswerId}
 					/>
 
-					<Button type="button" className="add-answer-button">
-						Добавить вариант ответа
+					<Button
+						type="button"
+						className="add-answer-button"
+						onClick={() => /*TODO*/ console.log('Сохранить все изменения формы')}
+					>
+						Сохранить изменния
 					</Button>
 				</div>
 			</div>

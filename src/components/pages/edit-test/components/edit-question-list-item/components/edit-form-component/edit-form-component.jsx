@@ -16,7 +16,7 @@ const EditFormComponentContainer = ({ inputValue, className, onCloseEditing, sub
 	return (
 		<div className={className}>
 			<form onSubmit={onSubmitForm}>
-				<input className="question-input" type="text" defaultValue={value} onChange={onChange} autoFocus />
+				<input className="edit-form-input" type="text" defaultValue={value} onChange={onChange} autoFocus />
 				<div>
 					<IconButton type="submit" className="icon-button">
 						<SlCheck />
@@ -42,7 +42,7 @@ export const EditFormComponent = styled(EditFormComponentContainer)`
 		width: 100%;
 	}
 
-	.question-input {
+	.edit-form-input {
 		flex: 1;
 		width: 100%;
 		padding: 9px 11px;
@@ -58,7 +58,7 @@ export const EditFormComponent = styled(EditFormComponentContainer)`
 		outline: none;
 		box-sizing: border-box;
 	}
-	.question-input:focus {
+	.edit-form-input:focus {
 		border-color: #777d8d;
 	}
 `;

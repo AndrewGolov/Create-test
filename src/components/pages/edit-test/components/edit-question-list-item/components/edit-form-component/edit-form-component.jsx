@@ -4,15 +4,18 @@ import { IconButton } from '../icon-button/icon-button';
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const EditingComponentContainer = ({ inputValue, className, onCloseEditing, onSubmit }) => {
+const EditFormComponentContainer = ({ inputValue, className, onCloseEditing, submitFn }) => {
 	const [value, setValue] = useState(inputValue);
 
 	const onChange = ({ target }) => setValue(target.value);
-	console.log(value);
+	const onSubmitForm = (event) => {
+		event.preventDefault();
+		submitFn(value);
+	};
 
 	return (
 		<div className={className}>
-			<form onSubmit={() => onSubmit(value)}>
+			<form onSubmit={onSubmitForm}>
 				<input className="question-input" type="text" defaultValue={value} onChange={onChange} autoFocus />
 				<div>
 					<IconButton type="submit" className="icon-button">
@@ -27,7 +30,7 @@ const EditingComponentContainer = ({ inputValue, className, onCloseEditing, onSu
 	);
 };
 
-export const EditingComponent = styled(EditingComponentContainer)`
+export const EditFormComponent = styled(EditFormComponentContainer)`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

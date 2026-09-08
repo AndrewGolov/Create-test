@@ -2,9 +2,9 @@
 import { updateQuestion } from '../../../../../bff/actions';
 import { Button } from '../../../../button/Button';
 import { useDispatch } from 'react-redux';
-import { EditingComponent, IconButton } from './components';
+import { EditFormComponent, IconButton, AnswersList, QuestionActionsPanel } from './components';
 import { useState } from 'react';
-import { SlArrowDown, SlPencil, SlTrash } from 'react-icons/sl';
+import { SlPencil } from 'react-icons/sl';
 import styled from 'styled-components';
 
 const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
@@ -14,7 +14,6 @@ const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
 	const [editingAnswerId, setEditingAnswerId] = useState(null);
 
 	const updateQuestionTest = async (questionText) => {
-		event.preventDefault();
 		const newQuestionData = { ...oneOfQuestionList, question: questionText };
 		await dispatch(updateQuestion(oneOfQuestionList._id, newQuestionData));
 		setIsEditingQuestion(false);
@@ -24,10 +23,10 @@ const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
 			<div className="question-header">
 				<div className="question-title">
 					{isEditingQuestion ? (
-						<EditingComponent
+						<EditFormComponent
 							inputValue={oneOfQuestionList.question}
 							onCloseEditing={() => setIsEditingQuestion(false)}
-							onSubmit={updateQuestionTest}
+							submitFn={updateQuestionTest}
 						/>
 					) : (
 						<>
@@ -44,25 +43,7 @@ const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
 					)}
 				</div>
 
-				<div className="question-actions">
-					<IconButton
-						type="button"
-						onClick={() => setIsOpen((prev) => !prev)}
-						title={isOpen ? 'Свернуть' : 'Развернуть'}
-						isOpen={isOpen}
-					>
-						<SlArrowDown />
-					</IconButton>
-
-					<IconButton
-						type="button"
-						className="icon-button delete-button"
-						onClick={() => console.log('Удалить вопрос')}
-						title="Удалить вопрос"
-					>
-						<SlTrash />
-					</IconButton>
-				</div>
+				<QuestionActionsPanel isOpen={isOpen} setIsOpen={setIsOpen} />
 			</div>
 
 			<div className={`question-content ${isOpen ? 'is-open' : ''}`}>
@@ -71,47 +52,11 @@ const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
 						<h5>Варианты ответа</h5>
 					</div>
 
-					<ul className="answers-list">
-						{oneOfQuestionList.answers.map((answer) => (
-							<li className="answer-item" key={answer.id}>
-								{editingAnswerId === answer.id ? (
-									<EditingComponent
-										inputValue={answer.title}
-										onCloseEditing={() => setEditingAnswerId(null)}
-									/>
-								) : (
-									<span className="answer-title">{answer.title}</span>
-								)}
-
-								<input
-									className="correct-checkbox"
-									type="checkbox"
-									checked={answer.isCorrect}
-									title="Правильный ответ"
-									readOnly
-								/>
-								<IconButton
-									type="button"
-									className="icon-button"
-									onClick={() =>
-										setEditingAnswerId((prev) => (prev === answer.id ? null : answer.id))
-									}
-									title="Редактировать ответ"
-								>
-									<SlPencil />
-								</IconButton>
-
-								<IconButton
-									type="button"
-									className="icon-button delete-button"
-									onClick={() => console.log('Удалить ответ')}
-									title="Удалить ответ"
-								>
-									<SlTrash />
-								</IconButton>
-							</li>
-						))}
-					</ul>
+					<AnswersList
+						oneOfQuestionList={oneOfQuestionList}
+						editingAnswerId={editingAnswerId}
+						setEditingAnswerId={setEditingAnswerId}
+					/>
 
 					<Button type="button" className="add-answer-button">
 						Добавить вариант ответа
@@ -166,22 +111,6 @@ export const EditQuestionListItem = styled(EditQuestionListItemContainer)`
 
 	.add-answer-button {
 		align-self: center;
-	}
-
-	.question-actions {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-		flex-shrink: 0;
-	}
-
-	.delete-button {
-		color: #d97878;
-	}
-
-	.delete-button:hover {
-		color: #ff8b8b;
-		background: #3a282b;
 	}
 
 	.toggle-button {

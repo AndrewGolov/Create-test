@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useSelector } from 'react-redux';
 import { selectTestsData, selectIsloadingTestData } from '../../../selectors';
+import { StyledLink } from '../../styled-link/styled-link';
 import { EditQuestionListItem } from './components';
 import { Loader } from '../../loader/Loader';
 import styled from 'styled-components';
@@ -9,20 +10,19 @@ const EditTestContainer = ({ className }) => {
 	const dataTest = useSelector(selectTestsData);
 	const isLoadingDataTest = useSelector(selectIsloadingTestData);
 
+	if (isLoadingDataTest) return <Loader />;
+
 	return (
 		<div className={className}>
-			{isLoadingDataTest ? (
-				<Loader />
-			) : (
-				<>
-					<h1>Редактирование теста</h1>
-					<ul>
-						{dataTest.map((oneOfQuestionList) => (
-							<EditQuestionListItem key={oneOfQuestionList._id} oneOfQuestionList={oneOfQuestionList} />
-						))}
-					</ul>
-				</>
-			)}
+			<h1>Редактирование теста</h1>
+			<ul>
+				{dataTest.map((questionData) => (
+					<EditQuestionListItem key={questionData._id} questionData={questionData} />
+				))}
+			</ul>
+			<StyledLink to={'/add-question'} className="add-btn">
+				Добавить вопрос
+			</StyledLink>
 		</div>
 	);
 };
@@ -35,5 +35,8 @@ export const EditTest = styled(EditTestContainer)`
 
 	& ul {
 		list-style: none;
+	}
+	.add-btn {
+		align-self: center;
 	}
 `;

@@ -11,11 +11,11 @@ const ButtonContainer = ({ className, children, type = 'button', disabled = fals
 
 export const Button = styled(ButtonContainer)`
 	width: ${({ width = '300px' }) => width};
-	padding: 15px 30px;
+	padding: ${({ padding = '15px 30px' }) => padding};
 	margin: ${({ margin }) => margin};
-	background: #1a9966;
+	background: ${({ background = '#1a9966' }) => background};
 	cursor: pointer;
-	font-size: 20px;
+	font-size: ${({ fz = '20px' }) => fz};
 	border-radius: 5px;
 	border: none;
 	color: #fff;

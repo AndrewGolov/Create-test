@@ -16,15 +16,6 @@ const QuestionActionsPanelContainer = ({ className, isOpen, setIsOpen }) => {
 			>
 				<SlArrowDown />
 			</IconButton>
-
-			<IconButton
-				type="button"
-				className="icon-button delete-button"
-				onClick={() => /*TODO*/ console.log('Удалить вопрос')}
-				title="Удалить вопрос"
-			>
-				<SlTrash />
-			</IconButton>
 		</div>
 	);
 };

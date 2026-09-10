@@ -1,25 +1,71 @@
 /* eslint-disable react-refresh/only-export-components */
-import { updateQuestion } from '../../../../../bff/actions';
-import { Button } from '../../../../button/Button';
+import { removeTestQuestion } from '../../../../../bff/actions';
 import { useDispatch } from 'react-redux';
-import { EditFormComponent, IconButton, AnswersList, QuestionActionsPanel } from './components';
-import { useState } from 'react';
-import { SlPencil } from 'react-icons/sl';
+import { IconButton } from './components';
+import { SlPencil, SlTrash } from 'react-icons/sl';
 import styled from 'styled-components';
+import { Link } from 'react-router';
 
-const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
+const EditQuestionListItemContainer = ({ className, questionData }) => {
 	const dispatch = useDispatch();
-	const [isOpen, setIsOpen] = useState(false);
-	const [isEditingQuestion, setIsEditingQuestion] = useState(false);
-	const [editingAnswerId, setEditingAnswerId] = useState(null);
-
-	const updateQuestionTest = async (questionText) => {
-		const newQuestionData = { ...oneOfQuestionList, question: questionText };
-		await dispatch(updateQuestion(oneOfQuestionList._id, newQuestionData));
-		setIsEditingQuestion(false);
+	const onRemoveQuestion = async () => {
+		await dispatch(removeTestQuestion(questionData._id));
 	};
+	if (!questionData) return;
 	return (
 		<li className={className}>
+			<h4 className="question-title">{questionData.question}</h4>
+			<div className="action-panel">
+				<Link to={`/edit-question/${questionData._id}`} className="edit-btn" title="Редактировать вопрос">
+					<SlPencil />
+				</Link>
+				<IconButton
+					type="button"
+					className="icon-button delete-button"
+					onClick={onRemoveQuestion}
+					title="Удалить вопрос"
+				>
+					<SlTrash />
+				</IconButton>
+			</div>
+		</li>
+	);
+};
+
+export const EditQuestionListItem = styled(EditQuestionListItemContainer)`
+	svg {
+		transition: transform 0.3s ease;
+	}
+
+	display: flex;
+	width: 100%;
+	border: 1px solid #353842;
+	border-radius: 8px;
+	background: #202229;
+	overflow: hidden;
+	box-sizing: border-box;
+	margin: 5px 0 0 0;
+	padding: 5px;
+
+	.question-title {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex: 1;
+	}
+
+	.action-panel {
+		align-self: center;
+	}
+
+	&:hover {
+		color: #ffffff;
+		background: #30323c;
+	}
+`;
+
+/*
+<li className={className}>
 			<div className="question-header">
 				<div className="question-title">
 					{isEditingQuestion ? (
@@ -29,17 +75,7 @@ const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
 							submitFn={updateQuestionTest}
 						/>
 					) : (
-						<>
-							<h4>{oneOfQuestionList.question}</h4>
-							<IconButton
-								type="button"
-								className="icon-button"
-								onClick={() => setIsEditingQuestion((prev) => !prev)}
-								title="Редактировать вопрос"
-							>
-								<SlPencil />
-							</IconButton>
-						</>
+
 					)}
 				</div>
 
@@ -61,44 +97,16 @@ const EditQuestionListItemContainer = ({ className, oneOfQuestionList }) => {
 					<Button
 						type="button"
 						className="add-answer-button"
-						onClick={() => /*TODO*/ console.log('Сохранить все изменения формы')}
+						onClick={() =>  console.log('Сохранить все изменения формы')}
 					>
 						Сохранить изменния
 					</Button>
 				</div>
 			</div>
 		</li>
-	);
-};
 
-export const EditQuestionListItem = styled(EditQuestionListItemContainer)`
-	list-style: none;
-	width: 100%;
-	border: 1px solid #353842;
-	border-radius: 8px;
-	background: #202229;
-	overflow: hidden;
-	box-sizing: border-box;
-	margin: 5px 0 0 0;
 
-	.question-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 16px;
-		min-height: 58px;
-		padding: 10px 16px;
-		box-sizing: border-box;
-	}
-
-	.question-title {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		flex: 1;
-	}
-
-	.question-title h4 {
+			.question-title h4 {
 		margin: 0;
 		color: #f1f1f1;
 		font-size: 16px;
@@ -248,4 +256,4 @@ export const EditQuestionListItem = styled(EditQuestionListItemContainer)`
 
 		flex-shrink: 0;
 	}
-`;
+*/

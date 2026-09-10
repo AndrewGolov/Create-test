@@ -22,6 +22,14 @@ export const testReducer = (state = initialAppState, { type, payload }) => {
 
 			return { ...state, testData: updatedTestData, isLoading: false };
 		}
+
+		case ACTIONS_TYPE.DELETE_TEST_QUESTION: {
+			const filteredTestData = state.testData.filter((question) => String(question.id) !== String(payload));
+			return {
+				...state,
+				testData: filteredTestData,
+			};
+		}
 		default:
 			return state;
 	}

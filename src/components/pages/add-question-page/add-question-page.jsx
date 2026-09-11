@@ -10,6 +10,7 @@ const AddQuestionPageContainer = ({ className }) => {
 		question: '',
 		answers: [],
 	});
+	console.log('dataQuestion:', dataQuestion);
 
 	const [questionValue, setQuestionValue] = useState('');
 	const [isAddAnswer, setIsAddAnswer] = useState(false);
@@ -17,7 +18,14 @@ const AddQuestionPageContainer = ({ className }) => {
 
 	const onChangeQuestion = ({ target }) => setQuestionValue(target.value);
 
-	const onChangeIsCorrect = ({ target }) => console.log(target.id);
+	const onChooseCorrect = (id) => {
+		if (dataQuestion.answers.some((ans) => ans.isCorrect && ans.id !== id)) return;
+
+		const answersWithCorrect = dataQuestion.answers.map((ans) =>
+			ans.id === id ? { ...ans, isCorrect: !ans.isCorrect } : ans,
+		);
+		setDataQuestion((prev) => ({ ...prev, answers: answersWithCorrect }));
+	};
 
 	const addQuestionText = () => {
 		if (!questionValue.trim()) return;
@@ -81,7 +89,6 @@ const AddQuestionPageContainer = ({ className }) => {
 		<div className={className}>
 			<form onSubmit={onSubmitForm}>
 				<div className="wrapper">
-					{/* Вопрос */}
 					<div className="question-section">
 						<div className="section-title">
 							<h3>Вопрос</h3>
@@ -118,7 +125,6 @@ const AddQuestionPageContainer = ({ className }) => {
 						)}
 					</div>
 
-					{/* Ответы */}
 					<div className="answers-section">
 						<div className="section-title">
 							<h3>Варианты ответа</h3>
@@ -129,7 +135,7 @@ const AddQuestionPageContainer = ({ className }) => {
 								{dataQuestion.answers.map((oneAnswer) =>
 									isEditAnswerId === oneAnswer.id ? (
 										<AnswerFieldComponent
-											onClose={() => editAnswer(oneAnswer.id, oneAnswer.title)}
+											onClose={closeAddAnswer}
 											onSubmit={(value) => editAnswer(oneAnswer.id, value)}
 											key={oneAnswer.id}
 											initialValue={oneAnswer.title}
@@ -138,7 +144,7 @@ const AddQuestionPageContainer = ({ className }) => {
 										<AnswersListItem
 											key={oneAnswer.id}
 											oneAnswer={oneAnswer}
-											onChangeIsCorrect={onChangeIsCorrect}
+											onChooseCorrect={onChooseCorrect}
 											setIsEditAnswerId={setIsEditAnswerId}
 											deleteAnswer={deleteAnswer}
 										/>
@@ -147,7 +153,6 @@ const AddQuestionPageContainer = ({ className }) => {
 							</ul>
 						)}
 
-						{/* Блок добавления ответа */}
 						<div className="add-answer-container">
 							{isAddAnswer ? (
 								<AnswerFieldComponent onClose={closeAddAnswer} onSubmit={addAnswer} />
@@ -164,11 +169,13 @@ const AddQuestionPageContainer = ({ className }) => {
 					</div>
 				</div>
 
-				{dataQuestion.question && dataQuestion.answers.length > 1 && (
-					<Button type="submit" className="submit-button">
-						Добавить вопрос в тест
-					</Button>
-				)}
+				<Button
+					type="submit"
+					className="submit-button"
+					disabled={!(dataQuestion.question && dataQuestion.answers.length > 1)}
+				>
+					Добавить вопрос в тест
+				</Button>
 			</form>
 		</div>
 	);

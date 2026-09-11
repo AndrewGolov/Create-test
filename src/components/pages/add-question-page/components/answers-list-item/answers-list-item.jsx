@@ -1,44 +1,47 @@
 /* eslint-disable react-refresh/only-export-components */
 import { SlPencil, SlTrash } from 'react-icons/sl';
-
 import styled from 'styled-components';
 
-const AnswersListItemContainer = ({ className, oneAnswer, onChangeIsCorrect, setIsEditAnswerId, deleteAnswer }) => {
-	return (
-		<>
-			<li className={className}>
-				<span className="answer-title">{oneAnswer.title}</span>
+const AnswersListItemContainer = ({
+	className,
+	oneAnswer,
+	onChooseCorrect,
+	setIsEditAnswerId,
+	deleteAnswer,
+	...props
+}) => (
+	<>
+		<li className={className} {...props}>
+			<span className="answer-title">{oneAnswer.title}</span>
 
-				<input
-					className="correct-checkbox"
-					type="checkbox"
-					checked={oneAnswer.isCorrect}
-					readOnly
-					title="Правильный ответ"
-					onChange={() => onChangeIsCorrect(oneAnswer.id)}
-				/>
+			<input
+				className="correct-checkbox"
+				type="checkbox"
+				checked={oneAnswer.isCorrect}
+				title="Правильный ответ"
+				onChange={() => onChooseCorrect(oneAnswer.id)}
+			/>
 
-				<button
-					type="button"
-					className="icon-button"
-					title="Редактировать ответ"
-					onClick={() => setIsEditAnswerId(oneAnswer.id)}
-				>
-					<SlPencil />
-				</button>
+			<button
+				type="button"
+				className="icon-button"
+				title="Редактировать ответ"
+				onClick={() => setIsEditAnswerId(oneAnswer.id)}
+			>
+				<SlPencil />
+			</button>
 
-				<button
-					type="button"
-					className="icon-button delete-button"
-					onClick={() => deleteAnswer(oneAnswer.id)}
-					title="Удалить ответ"
-				>
-					<SlTrash />
-				</button>
-			</li>
-		</>
-	);
-};
+			<button
+				type="button"
+				className="icon-button delete-button"
+				onClick={() => deleteAnswer(oneAnswer.id)}
+				title="Удалить ответ"
+			>
+				<SlTrash />
+			</button>
+		</li>
+	</>
+);
 
 export const AnswersListItem = styled(AnswersListItemContainer)`
 	min-height: 44px;

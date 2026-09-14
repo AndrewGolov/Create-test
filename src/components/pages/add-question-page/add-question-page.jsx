@@ -1,16 +1,19 @@
 /* eslint-disable react-refresh/only-export-components */
 import { SlPencil } from 'react-icons/sl';
 import { Button } from '../../button/Button';
+import { useDispatch } from 'react-redux';
 import { AnswerFieldComponent, AnswersListItem, CancelButton, ConfirmButton } from './components';
 import { useState } from 'react';
+import { addQuestion } from '../../../bff/actions';
+import { questionDataScheme } from './utils/question-data-scheme';
+import { useQuestionData } from './hooks/use-question-data';
 import styled from 'styled-components';
 
 const AddQuestionPageContainer = ({ className }) => {
-	const [dataQuestion, setDataQuestion] = useState({
-		question: '',
-		answers: [],
-	});
-	console.log('dataQuestion:', dataQuestion);
+	const { dataQuestion, addQuestionText, editQuestion, addAnswer, deleteAnswer, editAnswer, onChooseCorrect } =
+		useQuestionData();
+	const dispatch = useDispatch();
+	const [error, setError] = useState(null);
 
 	const [questionValue, setQuestionValue] = useState('');
 	const [isAddAnswer, setIsAddAnswer] = useState(false);
@@ -18,71 +21,19 @@ const AddQuestionPageContainer = ({ className }) => {
 
 	const onChangeQuestion = ({ target }) => setQuestionValue(target.value);
 
-	const onChooseCorrect = (id) => {
-		if (dataQuestion.answers.some((ans) => ans.isCorrect && ans.id !== id)) return;
-
-		const answersWithCorrect = dataQuestion.answers.map((ans) =>
-			ans.id === id ? { ...ans, isCorrect: !ans.isCorrect } : ans,
-		);
-		setDataQuestion((prev) => ({ ...prev, answers: answersWithCorrect }));
-	};
-
-	const addQuestionText = () => {
-		if (!questionValue.trim()) return;
-
-		setDataQuestion((prev) => ({
-			...prev,
-			question: questionValue,
-		}));
-	};
-
-	const editQuestion = () => {
-		setQuestionValue(dataQuestion.question);
-		setDataQuestion((prev) => ({
-			...prev,
-			question: '',
-		}));
-	};
 	const closeAddAnswer = () => {
 		setIsEditAnswerId(null);
 		setIsAddAnswer(false);
 	};
 
-	const addAnswer = (answerText) => {
-		if (!answerText.trim()) return;
-
-		const newAnswer = {
-			id: Date.now(),
-			title: answerText,
-			isCorrect: false,
-		};
-
-		setDataQuestion((prev) => ({
-			...prev,
-			answers: [...prev.answers, newAnswer],
-		}));
-
-		closeAddAnswer();
-	};
-
-	const deleteAnswer = (answerId) => {
-		setDataQuestion((prev) => ({
-			...prev,
-			answers: prev.answers.filter(({ id }) => id !== answerId),
-		}));
-	};
-	const editAnswer = (answerId, editAnswer) => {
-		setDataQuestion((prev) => ({
-			...prev,
-			answers: prev.answers.map((answer) => (answer.id !== answerId ? answer : { ...answer, title: editAnswer })),
-		}));
-		closeAddAnswer();
-	};
-
-	const onSubmitForm = (event) => {
+	const onSubmitForm = async (event) => {
 		event.preventDefault();
-
-		console.log('Добавить вопрос в тест:', dataQuestion);
+		try {
+			const validData = await questionDataScheme.validate(dataQuestion);
+			dispatch(addQuestion(validData));
+		} catch (error) {
+			setError(error.message);
+		}
 	};
 
 	return (
@@ -105,7 +56,11 @@ const AddQuestionPageContainer = ({ className }) => {
 									placeholder="Введите вопрос..."
 								/>
 
-								<ConfirmButton type="button" onClick={addQuestionText} title="Сохранить вопрос" />
+								<ConfirmButton
+									type="button"
+									onClick={() => addQuestionText(questionValue)}
+									title="Сохранить вопрос"
+								/>
 
 								<CancelButton type="button" onClick={() => setQuestionValue('')} title="Очистить" />
 							</div>
@@ -116,7 +71,10 @@ const AddQuestionPageContainer = ({ className }) => {
 								<button
 									type="button"
 									className="icon-button"
-									onClick={editQuestion}
+									onClick={() => {
+										setQuestionValue(dataQuestion.question);
+										editQuestion();
+									}}
 									title="Редактировать вопрос"
 								>
 									<SlPencil />
@@ -136,7 +94,10 @@ const AddQuestionPageContainer = ({ className }) => {
 									isEditAnswerId === oneAnswer.id ? (
 										<AnswerFieldComponent
 											onClose={closeAddAnswer}
-											onSubmit={(value) => editAnswer(oneAnswer.id, value)}
+											onSubmit={(value) => {
+												editAnswer(oneAnswer.id, value);
+												closeAddAnswer();
+											}}
 											key={oneAnswer.id}
 											initialValue={oneAnswer.title}
 										/>
@@ -144,7 +105,10 @@ const AddQuestionPageContainer = ({ className }) => {
 										<AnswersListItem
 											key={oneAnswer.id}
 											oneAnswer={oneAnswer}
-											onChooseCorrect={onChooseCorrect}
+											onChooseCorrect={(id) => {
+												setError(null);
+												onChooseCorrect(id);
+											}}
 											setIsEditAnswerId={setIsEditAnswerId}
 											deleteAnswer={deleteAnswer}
 										/>
@@ -155,7 +119,13 @@ const AddQuestionPageContainer = ({ className }) => {
 
 						<div className="add-answer-container">
 							{isAddAnswer ? (
-								<AnswerFieldComponent onClose={closeAddAnswer} onSubmit={addAnswer} />
+								<AnswerFieldComponent
+									onClose={closeAddAnswer}
+									onSubmit={(answerValue) => {
+										addAnswer(answerValue);
+										closeAddAnswer();
+									}}
+								/>
 							) : (
 								<Button
 									type="button"
@@ -168,7 +138,7 @@ const AddQuestionPageContainer = ({ className }) => {
 						</div>
 					</div>
 				</div>
-
+				{error && <span>{error}</span>}
 				<Button
 					type="submit"
 					className="submit-button"

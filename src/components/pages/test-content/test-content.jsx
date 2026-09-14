@@ -22,7 +22,7 @@ const TestContentContainer = ({ className }) => {
 	};
 
 	const onChooseAnswer = ({ target }) => {
-		const chooseAnswer = dataTest[currentQuestion].answers.find((ans) => ans.id === target.id);
+		const chooseAnswer = dataTest[currentQuestion].answers.find((ans) => String(ans.id) === String(target.id));
 		const userAnswer = {
 			questionId: dataTest[currentQuestion]._id,
 			answerId: target.id,

@@ -8,6 +8,12 @@ const initialAppState = {
 
 export const testReducer = (state = initialAppState, { type, payload }) => {
 	switch (type) {
+		case ACTIONS_TYPE.ADD_QUESTION_TEST: {
+			return {
+				...state,
+				testData: [...state.testData, payload],
+			};
+		}
 		case ACTIONS_TYPE.GET_TEST_DATA: {
 			return {
 				...state,

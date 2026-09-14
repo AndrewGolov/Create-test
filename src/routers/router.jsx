@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router';
-import { HomePage, TestContent, EditTest, AddQuestionPage } from '../components';
+import { HomePage, TestContent, AddQuestionPage, EditTest } from '../components';
 
 export const router = createBrowserRouter([
 	{

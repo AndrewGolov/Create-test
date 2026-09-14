@@ -9,16 +9,17 @@ const Test = require('./models/Test')
 app.use(cors())
 app.use(express.json())
 
-
-
-app.post('/test/post-question', (req, res) => {
-	console.log(req.body)
+app.post('/test/post-question', async (req, res) => {
+	const newAnswer = await Test.create(req.body)
+	res.json(newAnswer)
+	console.log('New test data posted')
 })
 
 
 app.get('/test',async(req, res) => {
 const data = await Test.find()
  res.json(data)
+	console.log('Test data loaded')
 })
 
 app.put('/test/edit/:id',async(req, res) => {
@@ -29,7 +30,7 @@ app.put('/test/edit/:id',async(req, res) => {
 
 app.delete('/test/delete/:id',async(req, res) => {
 	await Test.findByIdAndDelete(req.params.id)
-	res.json('deleted result')
+	res.json('deleted complete ')
 })
 
 

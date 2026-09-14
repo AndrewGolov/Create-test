@@ -15,7 +15,7 @@ const QuestionItemComponentContainer = ({ className, onChooseAnswer, userAnswers
 							name={`question-${currentTestData._id}`}
 							id={id}
 							onChange={onChooseAnswer}
-							checked={selectedAnswer?.answerId === id}
+							checked={selectedAnswer?.answerId === String(id)}
 						/>
 						<label htmlFor={id}>{title}</label>
 					</li>

@@ -5,6 +5,7 @@ const PORT = 3000
 const cors = require('cors')
 const mongoose = require('mongoose')
 const Test = require('./models/Test')
+const KEY = "WUAvIVNU7pGXI4Y9"
 
 app.use(cors())
 app.use(express.json())
@@ -31,10 +32,11 @@ app.put('/test/edit/:id',async(req, res) => {
 app.delete('/test/delete/:id',async(req, res) => {
 	await Test.findByIdAndDelete(req.params.id)
 	res.json('deleted complete ')
+	console.log(`deleted ${req.params.id}`)
 })
 
 
-mongoose.connect('mongodb+srv://andrewgolov90_db_user:WUAvIVNU7pGXI4Y9@sempdb.64bjbh5.mongodb.net/user_tests').then((res) => {
+mongoose.connect(`mongodb+srv://andrewgolov90_db_user:${KEY}@sempdb.64bjbh5.mongodb.net/user_tests`).then((res) => {
 	app.listen(PORT, () => {
 		console.log(`Listening on port ${PORT}`)
 	})

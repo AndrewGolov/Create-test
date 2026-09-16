@@ -1,20 +1,26 @@
 /* eslint-disable react-refresh/only-export-components */
-import { SlPencil } from 'react-icons/sl';
-import { Button } from '../../button/Button';
-import { useDispatch } from 'react-redux';
-import { AnswerFieldComponent, AnswersListItem, CancelButton, ConfirmButton } from './components';
+import { AnswerFieldComponent, AnswersListItem } from './components';
+import { Button } from '../../../../button/Button';
+import { CancelButton } from '../../../../cancel-button/cancel-button';
+import { ConfirmButton } from '../../../../confirm-button/confirm-button';
+import { EditButton } from '../../../../edit-button/edit-button';
 import { useState } from 'react';
-import { addQuestion } from '../../../bff/actions';
-import { questionDataScheme } from './utils/question-data-scheme';
-import { useQuestionData } from './hooks/use-question-data';
+import { questionDataScheme } from './utils';
+import { useQuestionData } from './hooks';
 import styled from 'styled-components';
 
-const AddQuestionPageContainer = ({ className }) => {
-	const { dataQuestion, addQuestionText, editQuestion, addAnswer, deleteAnswer, editAnswer, onChooseCorrect } =
-		useQuestionData();
-	const dispatch = useDispatch();
+const QuestionFormContainer = ({ className, editData, parentSubmit }) => {
+	const {
+		dataQuestion,
+		addQuestionText,
+		editQuestion,
+		addAnswer,
+		deleteAnswer,
+		editAnswer,
+		onChooseCorrect,
+		finishAdding,
+	} = useQuestionData(editData);
 	const [error, setError] = useState(null);
-
 	const [questionValue, setQuestionValue] = useState('');
 	const [isAddAnswer, setIsAddAnswer] = useState(false);
 	const [isEditAnswerId, setIsEditAnswerId] = useState(null);
@@ -30,7 +36,10 @@ const AddQuestionPageContainer = ({ className }) => {
 		event.preventDefault();
 		try {
 			const validData = await questionDataScheme.validate(dataQuestion);
-			dispatch(addQuestion(validData));
+			parentSubmit(validData);
+			closeAddAnswer();
+			finishAdding();
+			setQuestionValue('');
 		} catch (error) {
 			setError(error.message);
 		}
@@ -68,53 +77,53 @@ const AddQuestionPageContainer = ({ className }) => {
 							<div className="question-data-container">
 								<h2>{dataQuestion.question}</h2>
 
-								<button
+								<EditButton
 									type="button"
-									className="icon-button"
 									onClick={() => {
-										setQuestionValue(dataQuestion.question);
+										setQuestionValue(dataQuestion?.question);
 										editQuestion();
 									}}
 									title="Редактировать вопрос"
-								>
-									<SlPencil />
-								</button>
+								/>
 							</div>
 						)}
 					</div>
 
 					<div className="answers-section">
-						<div className="section-title">
-							<h3>Варианты ответа</h3>
-						</div>
-
-						{dataQuestion.answers.length > 0 && (
-							<ul className="answers-list">
-								{dataQuestion.answers.map((oneAnswer) =>
-									isEditAnswerId === oneAnswer.id ? (
-										<AnswerFieldComponent
-											onClose={closeAddAnswer}
-											onSubmit={(value) => {
-												editAnswer(oneAnswer.id, value);
-												closeAddAnswer();
-											}}
-											key={oneAnswer.id}
-											initialValue={oneAnswer.title}
-										/>
-									) : (
-										<AnswersListItem
-											key={oneAnswer.id}
-											oneAnswer={oneAnswer}
-											onChooseCorrect={(id) => {
-												setError(null);
-												onChooseCorrect(id);
-											}}
-											setIsEditAnswerId={setIsEditAnswerId}
-											deleteAnswer={deleteAnswer}
-										/>
-									),
-								)}
-							</ul>
+						{dataQuestion.answers.length === 0 ? (
+							<div>Список ответов еще пуст</div>
+						) : (
+							<>
+								<div className="section-title">
+									<h3>Варианты ответа</h3>
+								</div>
+								<ul className="answers-list">
+									{dataQuestion.answers.map((oneAnswer) =>
+										isEditAnswerId === oneAnswer.id ? (
+											<AnswerFieldComponent
+												onClose={closeAddAnswer}
+												onSubmit={(value) => {
+													editAnswer(oneAnswer.id, value);
+													closeAddAnswer();
+												}}
+												key={oneAnswer.id}
+												initialValue={oneAnswer.title}
+											/>
+										) : (
+											<AnswersListItem
+												key={oneAnswer.id}
+												oneAnswer={oneAnswer}
+												onChooseCorrect={(id) => {
+													setError(null);
+													onChooseCorrect(id);
+												}}
+												setIsEditAnswerId={setIsEditAnswerId}
+												deleteAnswer={deleteAnswer}
+											/>
+										),
+									)}
+								</ul>
+							</>
 						)}
 
 						<div className="add-answer-container">
@@ -144,14 +153,14 @@ const AddQuestionPageContainer = ({ className }) => {
 					className="submit-button"
 					disabled={!(dataQuestion.question && dataQuestion.answers.length > 1)}
 				>
-					Добавить вопрос в тест
+					Сохранить
 				</Button>
 			</form>
 		</div>
 	);
 };
 
-export const AddQuestionPage = styled(AddQuestionPageContainer)`
+export const QuestionForm = styled(QuestionFormContainer)`
 	width: 100%;
 	padding: 30px 20px;
 	box-sizing: border-box;
@@ -256,35 +265,6 @@ export const AddQuestionPage = styled(AddQuestionPageContainer)`
 	/* Ответы */
 	.answers-list {
 		padding: 0;
-	}
-
-	.icon-button {
-		width: 36px;
-		height: 36px;
-
-		flex: 0 0 36px;
-
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		padding: 0;
-
-		color: #f1f1f1;
-		background: transparent;
-
-		border: none;
-		border-radius: 6px;
-
-		font-size: 17px;
-
-		cursor: pointer;
-
-		transition: background 0.2s ease;
-	}
-
-	.icon-button:hover {
-		background: #292b34;
 	}
 
 	/* Добавление ответа */

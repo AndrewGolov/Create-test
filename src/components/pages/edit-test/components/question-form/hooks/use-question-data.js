@@ -1,11 +1,13 @@
 import { useState } from 'react';
 
-export const useQuestionData = () => {
-	const [dataQuestion, setDataQuestion] = useState({
-		question: '',
-		answers: [],
-	});
-
+export const useQuestionData = (editQuestionData) => {
+	const [dataQuestion, setDataQuestion] = useState(
+		editQuestionData || {
+			question: '',
+			answers: [],
+		},
+	);
+	
 	const addQuestionText = (questionValue) => {
 		if (!questionValue.trim()) return;
 
@@ -52,6 +54,13 @@ export const useQuestionData = () => {
 		}));
 	};
 
+	const finishAdding = () => {
+		setDataQuestion({
+			question: '',
+			answers: [],
+		});
+	};
+
 	const onChooseCorrect = (id) => {
 		if (dataQuestion.answers.some((ans) => ans.isCorrect && ans.id !== id)) return;
 
@@ -61,5 +70,14 @@ export const useQuestionData = () => {
 		setDataQuestion((prev) => ({ ...prev, answers: answersWithCorrect }));
 	};
 
-	return { dataQuestion, addQuestionText, editQuestion, addAnswer, deleteAnswer, editAnswer, onChooseCorrect };
+	return {
+		dataQuestion,
+		addQuestionText,
+		editQuestion,
+		addAnswer,
+		deleteAnswer,
+		editAnswer,
+		onChooseCorrect,
+		finishAdding,
+	};
 };

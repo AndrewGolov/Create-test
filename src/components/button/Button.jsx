@@ -11,6 +11,7 @@ const ButtonContainer = ({ className, children, type = 'button', disabled = fals
 
 export const Button = styled(ButtonContainer)`
 	width: ${({ width = '300px' }) => width};
+	height: ${({ height }) => height};
 	padding: ${({ padding = '15px 30px' }) => padding};
 	margin: ${({ margin }) => margin};
 	background: ${({ background = '#1a9966' }) => background};

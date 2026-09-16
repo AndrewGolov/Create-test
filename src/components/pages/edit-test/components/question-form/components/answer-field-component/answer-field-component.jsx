@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { ConfirmButton } from '../confirm-button/confirm-button';
-import { CancelButton } from '../cancel-button/cancel-button';
+import { ConfirmButton } from '../../../../../../confirm-button/confirm-button';
+import { CancelButton } from '../../../../../../cancel-button/cancel-button';
 import { useState } from 'react';
 import styled from 'styled-components';
 

@@ -30,7 +30,7 @@ export const testReducer = (state = initialAppState, { type, payload }) => {
 		}
 
 		case ACTIONS_TYPE.DELETE_TEST_QUESTION: {
-			const filteredTestData = state.testData.filter((question) => String(question.id) !== String(payload));
+			const filteredTestData = state.testData.filter((question) => String(question._id) !== String(payload));
 			return {
 				...state,
 				testData: filteredTestData,

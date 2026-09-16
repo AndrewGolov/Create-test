@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
-import { SlPencil, SlTrash } from 'react-icons/sl';
+import { SlTrash } from 'react-icons/sl';
+import { EditButton } from '../../../../../../edit-button/edit-button';
 import styled from 'styled-components';
 
 const AnswersListItemContainer = ({
@@ -22,14 +23,7 @@ const AnswersListItemContainer = ({
 				onChange={() => onChooseCorrect(oneAnswer.id)}
 			/>
 
-			<button
-				type="button"
-				className="icon-button"
-				title="Редактировать ответ"
-				onClick={() => setIsEditAnswerId(oneAnswer.id)}
-			>
-				<SlPencil />
-			</button>
+			<EditButton type="button" title="Редактировать ответ" onClick={() => setIsEditAnswerId(oneAnswer.id)} />
 
 			<button
 				type="button"
@@ -92,5 +86,6 @@ export const AnswersListItem = styled(AnswersListItemContainer)`
 
 	.delete-button:hover {
 		background: #38252a;
+		color: red;
 	}
 `;

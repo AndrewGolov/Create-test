@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router';
-import { HomePage, TestContent, AddQuestionPage, EditTest } from '../components';
+import { HomePage, TestContent, EditTest } from '../components';
+import { EditTestController, AddQuestionController } from '../components/pages/edit-test/utils';
 
 export const router = createBrowserRouter([
 	{
@@ -11,7 +12,8 @@ export const router = createBrowserRouter([
 		element: <TestContent />,
 	},
 	{ path: '/edit-test', element: <EditTest /> },
-	{ path: '/add-question', element: <AddQuestionPage /> },
+	{ path: '/edit-test/:id', element: <EditTestController /> },
+	{ path: '/edit-test/add-question', element: <AddQuestionController /> },
 	{
 		path: '*',
 		element: <h1>Page Not Found</h1>,

@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router';
 import { HomePage, TestContent, EditTest } from '../components';
-import { EditTestController, AddQuestionController } from '../components/pages/edit-test/utils';
+import { EditTestController, AddQuestionController } from '../components/pages/edit-test/controllers';
 
 export const router = createBrowserRouter([
 	{

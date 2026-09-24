@@ -7,7 +7,7 @@ export const useQuestionData = (editQuestionData) => {
 			answers: [],
 		},
 	);
-	
+
 	const addQuestionText = (questionValue) => {
 		if (!questionValue.trim()) return;
 
@@ -54,13 +54,6 @@ export const useQuestionData = (editQuestionData) => {
 		}));
 	};
 
-	const finishAdding = () => {
-		setDataQuestion({
-			question: '',
-			answers: [],
-		});
-	};
-
 	const onChooseCorrect = (id) => {
 		if (dataQuestion.answers.some((ans) => ans.isCorrect && ans.id !== id)) return;
 
@@ -78,6 +71,5 @@ export const useQuestionData = (editQuestionData) => {
 		deleteAnswer,
 		editAnswer,
 		onChooseCorrect,
-		finishAdding,
 	};
 };

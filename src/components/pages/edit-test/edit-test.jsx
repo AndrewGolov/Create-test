@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Loader } from '../../loader/Loader';
+import { HeaderPanel } from '../../header-panel/header-panel';
 import { SlPencil, SlTrash } from 'react-icons/sl';
 import { removeTestQuestion } from '../../../bff/actions';
 import { Link } from 'react-router';
@@ -23,9 +24,9 @@ const EditTestContainer = ({ className }) => {
 			{testData.length === 0 ? (
 				<div>Вопросов теста нет, добавьте первый вопрос</div>
 			) : (
-				<ol>
-					{testData.map((questionData) => (
-						<>
+				<div>
+					<ol>
+						{testData.map((questionData) => (
 							<li key={questionData._id} className="qd-li">
 								{questionData.question}
 								<div className="action-panel">
@@ -36,28 +37,36 @@ const EditTestContainer = ({ className }) => {
 									>
 										<SlPencil />
 									</Link>
-									<button
-										type="button"
-										className="icon-button delete-button"
-										onClick={() => onDeleteQuestion(questionData._id)}
-										title="Удалить ответ"
-									>
-										<SlTrash />
-									</button>
+									{testData.length > 1 && (
+										<button
+											type="button"
+											className="icon-button delete-button"
+											onClick={() => onDeleteQuestion(questionData._id)}
+											title="Удалить ответ"
+										>
+											<SlTrash />
+										</button>
+									)}
 								</div>
 							</li>
-						</>
-					))}
-				</ol>
+						))}
+					</ol>
+					<StyledLink to={'/edit-test/add-question'} margin="0 auto">
+						Добавить вопрос
+					</StyledLink>
+				</div>
 			)}
-			<StyledLink to={'/edit-test/add-question'} margin="0 auto">
-				Добавить вопрос
-			</StyledLink>
+
+			<HeaderPanel />
 		</div>
 	);
 };
 
 export const EditTest = styled(EditTestContainer)`
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	width: 100%;
 	box-sizing: border-box;
 	padding-right: 40px;

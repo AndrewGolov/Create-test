@@ -36,7 +36,7 @@ app.delete('/test/delete/:id',async(req, res) => {
 })
 
 
-mongoose.connect(`mongodb+srv://andrewgolov90_db_user:${KEY}@sempdb.64bjbh5.mongodb.net/user_tests`).then((res) => {
+mongoose.connect(`mongodb+srv://andrewgolov90_db_user:${KEY}@sempdb.64bjbh5.mongodb.net/user_tests`).then(() => {
 	app.listen(PORT, () => {
 		console.log(`Listening on port ${PORT}`)
 	})

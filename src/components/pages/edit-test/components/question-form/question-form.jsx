@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { questionDataScheme } from './utils';
 import { useQuestionData } from './hooks';
 import styled from 'styled-components';
-import { HeaderPanel } from '../../../../header-panel/header-panel';
+import { NavigationPanel } from '../../../../navigation-panel/navigation-panel';
 
 const QuestionFormContainer = ({ className, editData, onSubmit }) => {
 	const { dataQuestion, addAnswer, editQuestion, addQuestionText, deleteAnswer, editAnswer, onChooseCorrect } =
@@ -51,7 +51,7 @@ const QuestionFormContainer = ({ className, editData, onSubmit }) => {
 					Сохранить
 				</Button>
 			</form>
-			<HeaderPanel />
+			<NavigationPanel />
 		</div>
 	);
 };

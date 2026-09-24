@@ -3,7 +3,7 @@ import { SlArrowLeft, SlHome } from 'react-icons/sl';
 import { Link, useNavigate } from 'react-router';
 import styled from 'styled-components';
 
-const HeaderPanelContainer = ({ className }) => {
+const NavigationPanelContainer = ({ className }) => {
 	const navigate = useNavigate();
 
 	return (
@@ -20,7 +20,7 @@ const HeaderPanelContainer = ({ className }) => {
 	);
 };
 
-export const HeaderPanel = styled(HeaderPanelContainer)`
+export const NavigationPanel = styled(NavigationPanelContainer)`
 	display: flex;
 	width: 100%;
 	align-items: center;

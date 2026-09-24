@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { Loader } from '../../loader/Loader';
-import { HeaderPanel } from '../../header-panel/header-panel';
+import { NavigationPanel } from '../../navigation-panel/navigation-panel';
 import { SlPencil, SlTrash } from 'react-icons/sl';
 import { removeTestQuestion } from '../../../bff/actions';
 import { Link } from 'react-router';
@@ -57,7 +57,7 @@ const EditTestContainer = ({ className }) => {
 				</div>
 			)}
 
-			<HeaderPanel />
+			<NavigationPanel />
 		</div>
 	);
 };
